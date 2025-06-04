@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Динаміка освоєння навчального матеріалу</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .chart-container {
+            width: 100%;
+            height: 500px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Динаміка освоєння навчального матеріалу</h1>
+        
+        <div id="chart" class="chart-container"></div>
+        
+        <h2>Таблиця результатів</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>День (t)</th>
+                    <th>Q(t) до контролю</th>
+                    <th>Q(t) після контролю</th>
+                    <th>Подія</th>
+                    <th>Примітки</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td>Початок навчання</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>37.59</td>
+                    <td>52.59</td>
+                    <td>Контроль 1</td>
+                    <td>Додано +15 (недостатній рівень)</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>66.45</td>
+                    <td>66.45</td>
+                    <td>Контроль 2</td>
+                    <td>Успішно</td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>74.06</td>
+                    <td>74.06</td>
+                    <td>Контроль 3</td>
+                    <td>Успішно</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>78.24</td>
+                    <td>78.24</td>
+                    <td>Контроль 4</td>
+                    <td>Успішно</td>
+                </tr>
+                <tr>
+                    <td>25</td>
+                    <td>80.54</td>
+                    <td>80.54</td>
+                    <td>Контроль 5</td>
+                    <td>Успішно</td>
+                </tr>
+                <tr>
+                    <td>30</td>
+                    <td>81.79</td>
+                    <td>81.79</td>
+                    <td>Фінальний іспит</td>
+                    <td>Успішно</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Дані для графіка
+        const days = [0, 5, 10, 15, 20, 25, 30];
+        const Q_before = [0.00, 37.59, 66.45, 74.06, 78.24, 80.54, 81.79];
+        const Q_after = [0.00, 52.59, 66.45, 74.06, 78.24, 80.54, 81.79];
+        
+        // Створення трасувань для графіка
+        const trace_before = {
+            x: days,
+            y: Q_before,
+            mode: 'lines+markers',
+            name: 'До контролю',
+            line: {color: 'lightblue', width: 2},
+            marker: {size: 8}
+        };
+        
+        const trace_after = {
+            x: days,
+            y: Q_after,
+            mode: 'lines+markers',
+            name: 'Після контролю',
+            line: {color: 'blue', width: 2},
+            marker: {size: 8}
+        };
+        
+        const success_line = {
+            x: [0, 30],
+            y: [50, 50],
+            mode: 'lines',
+            name: 'Критерій успішності',
+            line: {color: 'red', dash: 'dash'}
+        };
+        
+        // Додавання анотації для корекції
+        const annotations = [{
+            x: 5,
+            y: 55,
+            text: 'Корекція +15',
+            showarrow: true,
+            arrowhead: 1,
+            ax: 0,
+            ay: -30
+        }];
+        
+        // Налаштування макету
+        const layout = {
+            title: 'Динаміка освоєння навчального матеріалу',
+            xaxis: {
+                title: 'Дні навчання',
+                tickvals: days
+            },
+            yaxis: {
+                title: 'Рівень знань (ум. од.)',
+                range: [0, 100]
+            },
+            hovermode: 'closest',
+            showlegend: true,
+            annotations: annotations
+        };
+        
+        // Відображення графіка
+        Plotly.newPlot('chart', [trace_before, trace_after, success_line], layout);
+    </script>
+</body>
+</html>
